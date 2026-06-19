@@ -138,7 +138,6 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  // App Bar
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     bool isMobile = ResponsiveLayout.isMobile(context);
     return AppBar(
