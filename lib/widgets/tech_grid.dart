@@ -29,6 +29,7 @@ class _TechGridState extends State<TechGrid>
 
   @override
   void dispose() {
+    _controller.stop();
     _controller.dispose();
     super.dispose();
   }

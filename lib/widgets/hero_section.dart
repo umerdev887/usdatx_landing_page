@@ -100,6 +100,8 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   void dispose() {
+    _entranceController.stop();
+    _shimmerController.stop();
     _entranceController.dispose();
     _shimmerController.dispose();
     super.dispose();
