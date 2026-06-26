@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -14,25 +15,144 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="/ustadx_landing_page/">
+  <base href="/usdatx_landing_page/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="UstadX Systems deploys custom, cross-platform enterprise software and mobile ecosystems that eliminate operational leakage, automate workflows, and scale your business infrastructure.">
+  <meta name="theme-color" content="#121212">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="UstadX Systems — High-Performance Enterprise Software">
+  <meta property="og:description"
+    content="Custom cross-platform enterprise software and mobile ecosystems for industrial operations, logistics, and workflow automation.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://umerdev887.github.io/usdatx_landing_page/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UstadX Systems — High-Performance Enterprise Software">
+  <meta name="twitter:description"
+    content="Custom cross-platform enterprise software and mobile ecosystems for industrial operations.">
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="usdatx_landing_page">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UstadX Systems">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <title>usdatx_landing_page</title>
+  <title>UstadX Systems — High-Performance Enterprise Software</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Loading Splash Screen Styles -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      overflow: hidden;
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #121212;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease-out;
+    }
+
+    .loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-logo {
+      font-family: 'Courier New', monospace;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 40px;
+    }
+
+    .loading-logo span {
+      color: #00E5FF;
+    }
+
+    .loading-bar-container {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .loading-bar {
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+      border-radius: 1px;
+      animation: loading-sweep 1.5s ease-in-out infinite;
+    }
+
+    @keyframes loading-sweep {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(350%);
+      }
+    }
+
+    .loading-status {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 16px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
+
 <body>
+  <!-- Loading Splash -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-logo">USTAD<span>X</span> SYSTEMS</div>
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+    <div class="loading-status">Loading...</div>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Remove loading screen once Flutter renders
+    window.addEventListener('flutter-first-frame', function () {
+      var loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(function () { loader.remove(); }, 600);
+      }
+    });
+  </script>
 </body>
+
 </html>
