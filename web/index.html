@@ -142,7 +142,6 @@
     <div class="loading-status">Loading...</div>
   </div>
 
-  <script src="flutter_bootstrap.js" async></script>
   <script>
     // Remove loading screen once Flutter renders
     window.addEventListener('flutter-first-frame', function () {
@@ -152,7 +151,18 @@
         setTimeout(function () { loader.remove(); }, 600);
       }
     });
+
+    // Fallback: automatically remove loader after 5 seconds
+    setTimeout(function () {
+      var loader = document.getElementById('loading-screen');
+      if (loader) {
+        console.warn('Loading screen removed by timeout fallback');
+        loader.classList.add('fade-out');
+        setTimeout(function () { loader.remove(); }, 600);
+      }
+    }, 5000);
   </script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 
 </html>
