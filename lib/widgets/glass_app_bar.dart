@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'nav_bar_item.dart';
 import '../responsive_layout.dart';
+import '../theme_notifier.dart';
 
 class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onServicesTap;
@@ -51,6 +52,24 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
                 // Logo
                 _buildLogo(context),
                 const Spacer(),
+                // Theme Toggle
+                ValueListenableBuilder<ThemeMode>(
+                  valueListenable: themeNotifier,
+                  builder: (context, mode, child) {
+                    final isDark = mode == ThemeMode.dark || 
+                        (mode == ThemeMode.system && theme.brightness == Brightness.dark);
+                    return IconButton(
+                      icon: Icon(
+                        isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                        color: theme.colorScheme.primary,
+                      ),
+                      onPressed: () {
+                        themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark;
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
                 // Navigation
                 if (isMobile)
                   IconButton(

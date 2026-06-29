@@ -36,6 +36,8 @@ class _TechGridState extends State<TechGrid>
 
   @override
   Widget build(BuildContext context) {
+    final accentColor = Theme.of(context).colorScheme.primary;
+
     return SizedBox(
       width: widget.width,
       height: widget.height,
@@ -46,7 +48,7 @@ class _TechGridState extends State<TechGrid>
             size: Size(widget.width, widget.height),
             painter: _TechGridPainter(
               progress: _controller.value,
-              accentColor: Theme.of(context).colorScheme.primary,
+              accentColor: accentColor,
             ),
           );
         },
@@ -77,10 +79,9 @@ class _TechGridPainter extends CustomPainter {
       for (int c = 0; c < cols; c++) {
         final jitterX = (random.nextDouble() - 0.5) * cellW * 0.4;
         final jitterY = (random.nextDouble() - 0.5) * cellH * 0.4;
-        nodes.add(Offset(
-          cellW * (c + 0.5) + jitterX,
-          cellH * (r + 0.5) + jitterY,
-        ));
+        nodes.add(
+          Offset(cellW * (c + 0.5) + jitterX, cellH * (r + 0.5) + jitterY),
+        );
       }
     }
 
@@ -140,8 +141,7 @@ class _TechGridPainter extends CustomPainter {
         final flowProgress = (progress * 3 + pair.$1 * 0.2) % 1.0;
         final flowOpacity = sin(flowProgress * pi) * 0.6;
         if (flowOpacity > 0.05) {
-          flowPaint.color =
-              accentColor.withAlpha((flowOpacity * 255).toInt());
+          flowPaint.color = accentColor.withAlpha((flowOpacity * 255).toInt());
           canvas.drawLine(nodes[pair.$1], nodes[pair.$2], flowPaint);
         }
       }
