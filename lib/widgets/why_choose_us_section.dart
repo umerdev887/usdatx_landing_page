@@ -49,6 +49,7 @@ class _WhyChooseUsSectionState extends State<WhyChooseUsSection>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isMobile = ResponsiveLayout.isMobile(context);
+    final isLight = theme.brightness == Brightness.light;
 
     return AnimatedBuilder(
       animation: _controller,
@@ -65,7 +66,9 @@ class _WhyChooseUsSectionState extends State<WhyChooseUsSection>
           horizontal: isMobile ? 24 : 48,
         ),
         decoration: BoxDecoration(
-          color: theme.scaffoldBackgroundColor,
+          color: isLight
+              ? const Color(0xFFF1F5F9)
+              : theme.scaffoldBackgroundColor,
         ),
         child: Column(
           children: [
@@ -85,13 +88,16 @@ class _WhyChooseUsSectionState extends State<WhyChooseUsSection>
                 style: theme.textTheme.labelMedium?.copyWith(
                   fontSize: 12,
                   letterSpacing: 2,
+                  color: theme.colorScheme.primary,
                 ),
               ),
             ),
             const SizedBox(height: 16),
             Text(
               'WHY CHOOSE USTADX',
-              style: theme.textTheme.headlineLarge,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -100,7 +106,9 @@ class _WhyChooseUsSectionState extends State<WhyChooseUsSection>
               child: Text(
                 'We don\'t just build software — we engineer competitive advantages that transform how your business operates.',
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
             const SizedBox(height: 72),
@@ -200,14 +208,25 @@ class _WhyChooseUsSectionState extends State<WhyChooseUsSection>
   }
 
   Widget _buildTechBadge(ThemeData theme, String name, IconData icon) {
+    final isLight = theme.brightness == Brightness.light;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: isLight ? Colors.white : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
-          color: theme.colorScheme.outline.withAlpha(50),
+          color: theme.colorScheme.outline.withAlpha(isLight ? 80 : 50),
         ),
+        boxShadow: isLight
+            ? [
+                BoxShadow(
+                  color: Colors.black.withAlpha(8),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -257,6 +276,7 @@ class _ReasonCardState extends State<_ReasonCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -267,26 +287,32 @@ class _ReasonCardState extends State<_ReasonCard> {
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
+          color: isLight ? Colors.white : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: _isHovered
-                ? widget.accentColor.withAlpha(120)
-                : theme.colorScheme.outline.withAlpha(40),
+                ? widget.accentColor.withAlpha(isLight ? 160 : 120)
+                : theme.colorScheme.outline.withAlpha(isLight ? 80 : 40),
             width: 1.5,
           ),
           boxShadow: [
             if (_isHovered)
               BoxShadow(
-                color: widget.accentColor.withAlpha(20),
+                color: widget.accentColor.withAlpha(isLight ? 25 : 20),
                 blurRadius: 40,
                 offset: const Offset(0, 12),
               )
             else
               BoxShadow(
-                color: Colors.black.withAlpha(20),
-                blurRadius: 20,
+                color: Colors.black.withAlpha(isLight ? 15 : 20),
+                blurRadius: isLight ? 24 : 20,
                 offset: const Offset(0, 6),
+              ),
+            if (isLight && !_isHovered)
+              BoxShadow(
+                color: widget.accentColor.withAlpha(6),
+                blurRadius: 12,
+                offset: const Offset(0, 3),
               ),
           ],
         ),

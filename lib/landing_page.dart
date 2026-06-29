@@ -5,6 +5,7 @@ import 'responsive_layout.dart';
 import 'widgets/glass_app_bar.dart';
 import 'widgets/hero_section.dart';
 import 'widgets/capability_card.dart';
+import 'widgets/section_divider.dart';
 import 'widgets/why_choose_us_section.dart';
 import 'widgets/process_section.dart';
 import 'widgets/core_engine_section.dart';
@@ -143,31 +144,39 @@ class _LandingPageState extends State<LandingPage> {
                   HeroSection(
                     onRequestDiscovery: () => _scrollToSection(_contactKey),
                   ),
+                  const SectionDivider(),
                   _buildCapabilitiesSection(context),
+                  const SectionDivider(),
                   WhyChooseUsSection(
                     key: _whyChooseUsKey,
                     isVisible: _whyChooseUsVisible,
                   ),
+                  const SectionDivider(),
                   ProcessSection(
                     key: _processKey,
                     isVisible: _processVisible,
                   ),
+                  const SectionDivider(),
                   CoreEngineSection(
                     key: _architectureKey,
                     isVisible: _coreEngineVisible,
                   ),
+                  const SectionDivider(),
                   ProjectsSection(
                     key: _projectsKey,
                     isVisible: _projectsVisible,
                   ),
+                  const SectionDivider(),
                   TestimonialsSection(
                     key: _testimonialsKey,
                     isVisible: _testimonialsVisible,
                   ),
+                  const SectionDivider(),
                   StatsSection(
                     key: _statsKey,
                     isVisible: _statsVisible,
                   ),
+                  const SectionDivider(),
                   ContactSection(
                     key: _contactKey,
                     isVisible: _contactVisible,
@@ -327,6 +336,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget _buildCapabilitiesSection(BuildContext context) {
     final theme = Theme.of(context);
     final isMobile = ResponsiveLayout.isMobile(context);
+    final isLight = theme.brightness == Brightness.light;
 
     return Container(
       key: _servicesKey,
@@ -336,7 +346,7 @@ class _LandingPageState extends State<LandingPage> {
         horizontal: isMobile ? 24 : 48,
       ),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: isLight ? Colors.white : theme.colorScheme.surface,
       ),
       child: Column(
         children: [
@@ -346,22 +356,25 @@ class _LandingPageState extends State<LandingPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(
-                color: theme.colorScheme.primary.withAlpha(40),
+                color: theme.colorScheme.primary.withAlpha(isLight ? 70 : 40),
               ),
-              color: theme.colorScheme.primary.withAlpha(10),
+              color: theme.colorScheme.primary.withAlpha(isLight ? 15 : 10),
             ),
             child: Text(
               'SERVICES',
               style: theme.textTheme.labelMedium?.copyWith(
                 fontSize: 12,
                 letterSpacing: 2,
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
           const SizedBox(height: 16),
           Text(
             'SYSTEM CAPABILITIES',
-            style: theme.textTheme.headlineLarge,
+            style: theme.textTheme.headlineLarge?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -370,7 +383,9 @@ class _LandingPageState extends State<LandingPage> {
             child: Text(
               'Enterprise-grade solutions engineered for scale and reliability.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           const SizedBox(height: 64),

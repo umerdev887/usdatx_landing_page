@@ -29,6 +29,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final isMobile = ResponsiveLayout.isMobile(context);
     final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
 
     return ClipRRect(
       child: BackdropFilter(
@@ -37,13 +38,26 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: preferredSize.height + MediaQuery.of(context).padding.top,
           padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withAlpha(180),
+            color: isLight
+                ? theme.colorScheme.surface.withAlpha(230)
+                : theme.colorScheme.surface.withAlpha(180),
             border: Border(
               bottom: BorderSide(
-                color: theme.colorScheme.primary.withAlpha(30),
+                color: isLight
+                    ? theme.colorScheme.outline.withAlpha(60)
+                    : theme.colorScheme.primary.withAlpha(30),
                 width: 1,
               ),
             ),
+            boxShadow: isLight
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(12),
+                      blurRadius: 12,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),

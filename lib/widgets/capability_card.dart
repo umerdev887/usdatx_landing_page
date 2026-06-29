@@ -64,6 +64,7 @@ class _CapabilityCardState extends State<CapabilityCard>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
 
     return AnimatedBuilder(
       animation: _revealController,
@@ -89,26 +90,33 @@ class _CapabilityCardState extends State<CapabilityCard>
             curve: Curves.easeOutCubic,
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+              color: isLight ? Colors.white : theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _isHovered
-                    ? theme.colorScheme.primary.withAlpha(150)
-                    : theme.colorScheme.outline.withAlpha(60),
+                    ? theme.colorScheme.primary.withAlpha(isLight ? 180 : 150)
+                    : theme.colorScheme.outline.withAlpha(isLight ? 100 : 60),
                 width: 1.5,
               ),
               boxShadow: [
                 if (_isHovered)
                   BoxShadow(
-                    color: theme.colorScheme.primary.withAlpha(25),
+                    color: theme.colorScheme.primary
+                        .withAlpha(isLight ? 30 : 25),
                     blurRadius: 40,
                     offset: const Offset(0, 15),
                   )
                 else
                   BoxShadow(
-                    color: Colors.black.withAlpha(40),
-                    blurRadius: 20,
+                    color: Colors.black.withAlpha(isLight ? 18 : 40),
+                    blurRadius: isLight ? 24 : 20,
                     offset: const Offset(0, 8),
+                  ),
+                if (isLight && !_isHovered)
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withAlpha(8),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
                   ),
               ],
             ),
@@ -127,9 +135,11 @@ class _CapabilityCardState extends State<CapabilityCard>
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: theme.colorScheme.primary.withAlpha(15),
+                        color: theme.colorScheme.primary
+                            .withAlpha(isLight ? 18 : 15),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withAlpha(40),
+                          color: theme.colorScheme.primary
+                              .withAlpha(isLight ? 60 : 40),
                         ),
                       ),
                       child: Text(
@@ -149,8 +159,10 @@ class _CapabilityCardState extends State<CapabilityCard>
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         color: _isHovered
-                            ? theme.colorScheme.primary.withAlpha(25)
-                            : theme.colorScheme.primary.withAlpha(10),
+                            ? theme.colorScheme.primary
+                                .withAlpha(isLight ? 30 : 25)
+                            : theme.colorScheme.primary
+                                .withAlpha(isLight ? 15 : 10),
                       ),
                       child: Icon(
                         widget.icon,
@@ -165,14 +177,20 @@ class _CapabilityCardState extends State<CapabilityCard>
                 // Title
                 Text(
                   widget.title,
-                  style: theme.textTheme.headlineSmall?.copyWith(fontSize: 21),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: 21,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 14),
 
                 // Subtext
                 Text(
                   widget.subtext,
-                  style: theme.textTheme.bodyMedium?.copyWith(height: 1.7),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    height: 1.7,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 24),
 

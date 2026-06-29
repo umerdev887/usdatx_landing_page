@@ -16,6 +16,8 @@ class _HeroSectionState extends State<HeroSection>
     with TickerProviderStateMixin {
   late AnimationController _entranceController;
   late AnimationController _shimmerController;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseGlow;
   late Animation<double> _headlineOpacity;
   late Animation<Offset> _headlineSlide;
   late Animation<double> _subheadOpacity;
@@ -95,6 +97,14 @@ class _HeroSectionState extends State<HeroSection>
       ),
     );
 
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+    _pulseGlow = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
     _entranceController.forward();
   }
 
@@ -102,8 +112,10 @@ class _HeroSectionState extends State<HeroSection>
   void dispose() {
     _entranceController.stop();
     _shimmerController.stop();
+    _pulseController.stop();
     _entranceController.dispose();
     _shimmerController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -298,6 +310,8 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   Widget _buildShimmerHeadline(ThemeData theme, bool isMobile) {
+    final isLight = theme.brightness == Brightness.light;
+
     return AnimatedBuilder(
       animation: _shimmerController,
       builder: (context, child) {
@@ -329,6 +343,7 @@ class _HeroSectionState extends State<HeroSection>
                 ? theme.textTheme.displaySmall
                 : theme.textTheme.displayMedium)
             ?.copyWith(
+          // Must be white for ShaderMask blendMode to work
           color: Colors.white,
         ),
       ),
@@ -336,75 +351,91 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   Widget _buildCtaButton(ThemeData theme) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isCtaHovered = true),
-      onExit: (_) => setState(() => _isCtaHovered = false),
-      child: GestureDetector(
-        onTap: widget.onRequestDiscovery,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            gradient: _isCtaHovered
-                ? null
-                : LinearGradient(
-                    colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.primary.withAlpha(200),
-                    ],
+    final isLight = theme.brightness == Brightness.light;
+
+    return AnimatedBuilder(
+      animation: _pulseGlow,
+      builder: (context, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => setState(() => _isCtaHovered = true),
+          onExit: (_) => setState(() => _isCtaHovered = false),
+          child: GestureDetector(
+            onTap: widget.onRequestDiscovery,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                gradient: _isCtaHovered
+                    ? null
+                    : LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.primary.withAlpha(200),
+                        ],
+                      ),
+                color: _isCtaHovered ? Colors.transparent : null,
+                border: Border.all(
+                  color: theme.colorScheme.primary,
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withAlpha(
+                      _isCtaHovered
+                          ? 100
+                          : (30 + (_pulseGlow.value * 40).toInt()),
+                    ),
+                    blurRadius: _isCtaHovered
+                        ? 30
+                        : 15 + _pulseGlow.value * 10,
+                    spreadRadius: _isCtaHovered ? 2 : _pulseGlow.value * 1,
                   ),
-            color: _isCtaHovered ? Colors.transparent : null,
-            border: Border.all(
-              color: theme.colorScheme.primary,
-              width: 2,
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 300),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      color: _isCtaHovered
+                          ? theme.colorScheme.primary
+                          : isLight
+                              ? Colors.white
+                              : theme.scaffoldBackgroundColor,
+                    ),
+                    child: const Text('Let\'s Discuss Your Project'),
+                  ),
+                  const SizedBox(width: 12),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    transform: Matrix4.translationValues(
+                      _isCtaHovered ? 4 : 0,
+                      0,
+                      0,
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 20,
+                      color: _isCtaHovered
+                          ? theme.colorScheme.primary
+                          : isLight
+                              ? Colors.white
+                              : theme.scaffoldBackgroundColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary
-                    .withAlpha(_isCtaHovered ? 100 : 50),
-                blurRadius: _isCtaHovered ? 30 : 15,
-                spreadRadius: _isCtaHovered ? 2 : 0,
-              ),
-            ],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 300),
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                  color: _isCtaHovered
-                      ? theme.colorScheme.primary
-                      : theme.scaffoldBackgroundColor,
-                ),
-                child: const Text('Let\'s Discuss Your Project'),
-              ),
-              const SizedBox(width: 12),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                transform: Matrix4.translationValues(
-                  _isCtaHovered ? 4 : 0,
-                  0,
-                  0,
-                ),
-                child: Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 20,
-                  color: _isCtaHovered
-                      ? theme.colorScheme.primary
-                      : theme.scaffoldBackgroundColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

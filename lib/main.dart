@@ -221,8 +221,9 @@ class UstadXApp extends StatelessWidget {
     const Color accent = Color(0xFF0097A7);
     const Color accentWarm = Color(0xFFF57C00);
     const Color textPrimary = Color(0xFF1E293B);
-    const Color textSecondary = Color(0xFF64748B);
+    const Color textSecondary = Color(0xFF475569);
     const Color border = Color(0xFFCBD5E1);
+    const Color divider = Color(0xFFE2E8F0);
 
     final headlineFont = GoogleFonts.spaceGrotesk();
     final bodyFont = GoogleFonts.inter();
@@ -232,6 +233,7 @@ class UstadXApp extends StatelessWidget {
       scaffoldBackgroundColor: background,
       primaryColor: accent,
       cardColor: surface,
+      dividerColor: divider,
       colorScheme: const ColorScheme.light(
         primary: accent,
         secondary: accentWarm,
